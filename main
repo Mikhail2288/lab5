@@ -12,20 +12,15 @@ import java.util.AbstractMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 public class Main {
-
+    //3.8
     public static <T> List<T> findUniqueElements(List<T> L1, List<T> L2) {
-        List<T> L = new ArrayList<>();
-        boolean found;
-        for (T element1 : L1) {
-            found = false;
-            for (T element2 : L2) {
-                if (element1.equals(element2)) found = true;
-            }
-            if (!found) L.add(element1);
+        Set<T> L = new HashSet<>();//создаем множество для уникальности элементов
+        for (T element : L1) {
+            if (!L2.contains(element)) L.add(element);
         }
-        return L;
+        return new ArrayList<>(L);
     }
-
+    //4.8
     public static void findTopTwoStudents(String file) {
         Map<String, Integer> school50Scores = new HashMap<>();
         try (Scanner scanner = new Scanner(new File(file))) {
@@ -78,6 +73,7 @@ public class Main {
             out.println(topStudents.get(0));
         }
     }
+    //5.8
     public static int missinglettersintext(String file){
         Set<Character> lettersInText = new HashSet<>();
 
@@ -101,6 +97,7 @@ public class Main {
         missingLetters.removeAll(lettersInText);
         return missingLetters.size();
     }
+    //6.3
     public static <T> boolean hasConsecutiveEquals(Queue<T> queue) {
         if (queue == null || queue.size() < 2) return false;
 
@@ -117,9 +114,22 @@ public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         Main m = new Main();
+        //1.1
+        interfacefraction f1 = new cashfraction(1, 2);
+        out.println("Дробь в обычном виде: " + f1);
+        out.println("Дробь в вещественном виде: " + f1.getDecimalValue());
+        f1.setNumerator(0);
+        out.println("Дробь в обычном виде: " + f1);
+        out.println("Дробь в вещественном виде: " +f1.getDecimalValue());
+        f1.setDenominator(4);
+        out.println("Дробь в обычном виде: " + f1);
+        out.println("Дробь в вещественном виде: " + f1.getDecimalValue());
+        out.println(f1.hashCode());
+        interfacefraction f2 = new cashfraction(1, 2);
+        out.println(f1.equals(f2));
         //3.8
         out.println("3.8");
-        List<Integer> L1 = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6));
+        List<Integer> L1 = new ArrayList<>(List.of(1, 2, 3, 4, 4, 5, 6));
         List<Integer> L2 = new ArrayList<>(List.of(3, 5, 7, 8));
         List<Integer> L = findUniqueElements(L1, L2);
         out.println("Список L (Integer): " + L);
