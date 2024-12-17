@@ -5,6 +5,12 @@ import java.util.List;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 public class Main {
 
     public static <T> List<T> findUniqueElements(List<T> L1, List<T> L2) {
@@ -144,6 +150,34 @@ public class Main {
         queue.add(30);
         queue.add(40);
         queue.add(10);
-        out.println("В очереди L хотя бы один элемент, который равен следующему за ним - " + hasConsecutiveEquals(queue)); // false
+        out.println("В очереди L хотя бы один элемент, который равен следующему за ним - " + hasConsecutiveEquals(queue));
+        //7.2
+        out.println("7.2");
+        Path path = Path.of("C:\\Users\\mifan\\IdeaProjects\\lab4\\out\\production\\lab4\\peopleandnumbers.txt");
+        try {
+            Map<Integer, List<String>> result = Files.lines(path)//Читаем строки из файла и возвращаем последовательность строк
+                    .map(line -> line.split(":"))//делаем сплит строки по двоеточию
+                    .filter(parts -> parts.length == 2 && !parts[1].isEmpty())//Оставляем в потоке только те массивы, которые состоят из двух элементов, и есть номер
+                    .map(parts -> {
+                        String name = formatName(parts[0].trim()); // форматируем имя, первая буква большая, остальные маленькие
+                        int number = Integer.parseInt(parts[1].trim()); // парсим номер в инт
+                        return new AbstractMap.SimpleEntry<>(name, number);// возвращаем пару имя-номер
+                    })
+                    // группируем по номерам
+                    .collect(Collectors.groupingBy(
+                            Map.Entry::getValue, //группировка по номеру
+                            Collectors.mapping(Map.Entry::getKey, Collectors.toList())// собираем имена в список для каждого номера
+                    ));
+
+            out.println(result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String formatName(String name) {// метод для форматирования имени
+        if (name == null || name.isEmpty()) return name;
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();//форматируем имя
     }
 }
